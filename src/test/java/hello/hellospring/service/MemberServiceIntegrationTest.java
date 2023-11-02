@@ -1,34 +1,25 @@
 package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
-//import org.junit.jupiter.api.Assertions;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {// 단위 테스트: 빠름 (굿)
+@SpringBootTest
+@Transactional //DB 데이터 롤백 해줌 -> 테스트 반복 가능(데이터 중복이 없기 때문에), 메서드 마다 적용됨
+class MemberServiceIntegrationTest {// 통합 테스트 (DB연동)
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
-
-    @BeforeEach
-    public void beforeEach(){
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    public void afterEach(){
-        memberRepository.clearStore();
-    }
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
 
     @Test
     void 회원가입() {
@@ -60,13 +51,5 @@ class MemberServiceTest {// 단위 테스트: 빠름 (굿)
 
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
         //then
-    }
-
-    @Test
-    void findMembers() {
-    }
-
-    @Test
-    void findOne() {
     }
 }
